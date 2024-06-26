@@ -80,7 +80,6 @@ public class flogin extends javax.swing.JFrame {
 
         btn_logout.setText("LOGOUT");
 
-        txt_password.setText("jPasswordField1");
         txt_password.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 txt_passwordActionPerformed(evt);

@@ -384,14 +384,8 @@
           </SubComponents>
         </Container>
         <Component class="javax.swing.JPasswordField" name="txt_password">
-          <Properties>
-            <Property name="text" type="java.lang.String" value="jPasswordField1"/>
-          </Properties>
         </Component>
         <Component class="javax.swing.JPasswordField" name="txt_password1">
-          <Properties>
-            <Property name="text" type="java.lang.String" value="jPasswordField1"/>
-          </Properties>
         </Component>
       </SubComponents>
     </Container>

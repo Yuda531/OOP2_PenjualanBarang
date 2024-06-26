@@ -178,10 +178,6 @@ public class fpegawai extends javax.swing.JFrame {
         txt_alamat.setRows(5);
         jScrollPane1.setViewportView(txt_alamat);
 
-        txt_password.setText("jPasswordField1");
-
-        txt_password1.setText("jPasswordField1");
-
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
@@ -307,6 +303,9 @@ public class fpegawai extends javax.swing.JFrame {
 
     private void btn_backActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_backActionPerformed
         // TODO add your handling code here:
+        fmenu fb = new fmenu();
+        fb.setVisible(true);
+        this.setVisible(false);
     }//GEN-LAST:event_btn_backActionPerformed
 
     private void btn_tambahActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_tambahActionPerformed

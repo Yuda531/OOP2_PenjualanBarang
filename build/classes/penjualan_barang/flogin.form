@@ -164,9 +164,6 @@
           </Properties>
         </Component>
         <Component class="javax.swing.JPasswordField" name="txt_password">
-          <Properties>
-            <Property name="text" type="java.lang.String" value="jPasswordField1"/>
-          </Properties>
           <Events>
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="txt_passwordActionPerformed"/>
           </Events>
