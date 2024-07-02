@@ -5,6 +5,13 @@
  */
 package penjualan_barang;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
+
 /**
  *
  * @author Agung Yuda
@@ -14,8 +21,49 @@ public class fpegawai extends javax.swing.JFrame {
     /**
      * Creates new form fpegawai
      */
+    private DefaultTableModel model;
+    
     public fpegawai() {
         initComponents();
+        model = new DefaultTableModel();
+        jTable1.setModel(model);
+
+        model.addColumn("ID");
+        model.addColumn("Username");
+        model.addColumn("Password");
+        model.addColumn("Jenis Kelamin");
+        model.addColumn("Email");
+        model.addColumn("No. Telp");
+        model.addColumn("Agama");
+        model.addColumn("Alamat");
+        fetchData();
+    }
+
+    private void fetchData() {
+        try {
+            Connection con = koneksi.getKoneksi();
+            String sql = "SELECT * FROM tb_akun";
+            PreparedStatement pst = con.prepareStatement(sql);
+            ResultSet rs = pst.executeQuery();
+            DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
+            model.setRowCount(0);
+            while (rs.next()) {
+                model.addRow(new Object[]{rs.getInt("id_akun"), rs.getString("username"), rs.getString("password"), rs.getString("email"), rs.getString("no_tlp"), rs.getString("alamat"), rs.getString("jenis_kelamin"), rs.getString("agama")});
+            }
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(null, "Error fetching data: " + e.getMessage());
+        }
+    }
+
+    private void clearForm() {
+        txt_username.setText("");
+        txt_password.setText("");
+        txt_email.setText("");
+        txt_notelp.setText("");
+        txt_alamat.setText("");
+        jRadioButton_lakilaki.setSelected(false);
+        jRadioButton_perempuan.setSelected(false);
+        jComboBox_agama.setSelectedIndex(0);
     }
 
     /**
@@ -33,7 +81,6 @@ public class fpegawai extends javax.swing.JFrame {
         jPanel2 = new javax.swing.JPanel();
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
-        jLabel4 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
         jLabel7 = new javax.swing.JLabel();
@@ -45,13 +92,12 @@ public class fpegawai extends javax.swing.JFrame {
         txt_username = new javax.swing.JTextField();
         txt_email = new javax.swing.JTextField();
         txt_notelp = new javax.swing.JTextField();
-        jRadioButton1 = new javax.swing.JRadioButton();
-        jRadioButton2 = new javax.swing.JRadioButton();
-        jComboBox1 = new javax.swing.JComboBox<>();
+        jRadioButton_lakilaki = new javax.swing.JRadioButton();
+        jRadioButton_perempuan = new javax.swing.JRadioButton();
+        jComboBox_agama = new javax.swing.JComboBox<>();
         jScrollPane1 = new javax.swing.JScrollPane();
         txt_alamat = new javax.swing.JTextArea();
         txt_password = new javax.swing.JPasswordField();
-        txt_password1 = new javax.swing.JPasswordField();
         jScrollPane2 = new javax.swing.JScrollPane();
         jTable1 = new javax.swing.JTable();
 
@@ -100,10 +146,6 @@ public class fpegawai extends javax.swing.JFrame {
         jLabel3.setForeground(new java.awt.Color(255, 255, 255));
         jLabel3.setText("Username");
 
-        jLabel4.setFont(new java.awt.Font("Cambria", 1, 16)); // NOI18N
-        jLabel4.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel4.setText("Retype Pass");
-
         jLabel5.setFont(new java.awt.Font("Cambria", 1, 16)); // NOI18N
         jLabel5.setForeground(new java.awt.Color(255, 255, 255));
         jLabel5.setText("Jenis Kelamin");
@@ -139,6 +181,11 @@ public class fpegawai extends javax.swing.JFrame {
         });
 
         btn_hapus.setText("Hapus");
+        btn_hapus.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_hapusActionPerformed(evt);
+            }
+        });
 
         txt_username.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -158,21 +205,21 @@ public class fpegawai extends javax.swing.JFrame {
             }
         });
 
-        jRadioButton1.setText("laki-laki");
-        jRadioButton1.addActionListener(new java.awt.event.ActionListener() {
+        jRadioButton_lakilaki.setText("laki-laki");
+        jRadioButton_lakilaki.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jRadioButton1ActionPerformed(evt);
+                jRadioButton_lakilakiActionPerformed(evt);
             }
         });
 
-        jRadioButton2.setText("perempuan");
-        jRadioButton2.addActionListener(new java.awt.event.ActionListener() {
+        jRadioButton_perempuan.setText("perempuan");
+        jRadioButton_perempuan.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jRadioButton2ActionPerformed(evt);
+                jRadioButton_perempuanActionPerformed(evt);
             }
         });
 
-        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Islam", "Kristen", "Hindu", "Budha" }));
+        jComboBox_agama.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Islam", "Kristen", "Hindu", "Budha" }));
 
         txt_alamat.setColumns(20);
         txt_alamat.setRows(5);
@@ -185,47 +232,48 @@ public class fpegawai extends javax.swing.JFrame {
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addGap(50, 50, 50)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel3)
+                    .addComponent(jLabel2))
+                .addGap(45, 45, 45)
+                .addComponent(btn_tambah)
+                .addGap(78, 78, 78)
+                .addComponent(btn_hapus)
+                .addGap(83, 83, 83)
+                .addComponent(btn_ubah)
+                .addGap(0, 0, Short.MAX_VALUE))
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel3)
-                            .addComponent(jLabel5)
-                            .addComponent(jLabel4)
-                            .addComponent(jLabel2))
-                        .addGap(18, 18, 18)
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jPanel2Layout.createSequentialGroup()
-                                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(txt_username, javax.swing.GroupLayout.Alignment.TRAILING)
-                                    .addComponent(txt_password, javax.swing.GroupLayout.DEFAULT_SIZE, 182, Short.MAX_VALUE)
-                                    .addComponent(txt_password1))
-                                .addGap(63, 63, 63)
-                                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jLabel7)
-                                    .addComponent(jLabel8)
-                                    .addComponent(jLabel9))
+                                .addComponent(jLabel5)
                                 .addGap(18, 18, 18)
-                                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                    .addComponent(txt_notelp, javax.swing.GroupLayout.DEFAULT_SIZE, 160, Short.MAX_VALUE)
-                                    .addComponent(jComboBox1, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(jScrollPane1))
-                                .addGap(54, 54, 54))
-                            .addGroup(jPanel2Layout.createSequentialGroup()
                                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(txt_email, javax.swing.GroupLayout.PREFERRED_SIZE, 182, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addGroup(jPanel2Layout.createSequentialGroup()
-                                        .addComponent(jRadioButton1)
+                                        .addComponent(jRadioButton_lakilaki)
                                         .addGap(18, 18, 18)
-                                        .addComponent(jRadioButton2))
-                                    .addGroup(jPanel2Layout.createSequentialGroup()
-                                        .addComponent(btn_tambah)
-                                        .addGap(78, 78, 78)
-                                        .addComponent(btn_hapus)
-                                        .addGap(83, 83, 83)
-                                        .addComponent(btn_ubah)))
-                                .addGap(0, 0, Short.MAX_VALUE))))
+                                        .addComponent(jRadioButton_perempuan))))
+                            .addGroup(jPanel2Layout.createSequentialGroup()
+                                .addComponent(jLabel6)
+                                .addGap(261, 261, 261))))
                     .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addComponent(jLabel6)
-                        .addGap(0, 0, Short.MAX_VALUE))))
+                        .addGap(171, 171, 171)
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(txt_username, javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(txt_password, javax.swing.GroupLayout.DEFAULT_SIZE, 182, Short.MAX_VALUE))))
+                .addGap(63, 63, 63)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel7)
+                    .addComponent(jLabel8)
+                    .addComponent(jLabel9))
+                .addGap(18, 18, 18)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(txt_notelp, javax.swing.GroupLayout.DEFAULT_SIZE, 160, Short.MAX_VALUE)
+                    .addComponent(jComboBox_agama, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jScrollPane1))
+                .addGap(54, 54, 54))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -240,25 +288,22 @@ public class fpegawai extends javax.swing.JFrame {
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel2)
                     .addComponent(jLabel8)
-                    .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jComboBox_agama, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(txt_password, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(25, 25, 25)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addComponent(jLabel9)
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 119, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel4)
-                            .addComponent(jLabel9)
-                            .addComponent(txt_password1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(23, 23, 23)
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel5)
-                            .addComponent(jRadioButton1)
-                            .addComponent(jRadioButton2))
+                            .addComponent(jRadioButton_lakilaki)
+                            .addComponent(jRadioButton_perempuan))
                         .addGap(27, 27, 27)
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel6)
-                            .addComponent(txt_email, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 119, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(txt_email, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
                 .addGap(28, 28, 28)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btn_tambah)
@@ -278,6 +323,11 @@ public class fpegawai extends javax.swing.JFrame {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
+        jTable1.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jTable1MouseClicked(evt);
+            }
+        });
         jScrollPane2.setViewportView(jTable1);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -310,10 +360,47 @@ public class fpegawai extends javax.swing.JFrame {
 
     private void btn_tambahActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_tambahActionPerformed
         // TODO add your handling code here:
+        try {
+            Connection con = koneksi.getKoneksi();
+            String sql = "INSERT INTO tb_akun (username, password, email, no_tlp, alamat, jenis_kelamin, agama) VALUES (?, ?, ?, ?, ?, ?, ?)";
+            PreparedStatement pst = con.prepareStatement(sql);
+            pst.setString(1, txt_username.getText());
+            pst.setString(2, txt_password.getText());
+            pst.setString(3, txt_email.getText());
+            pst.setString(4, txt_notelp.getText());
+            pst.setString(5, txt_alamat.getText());
+            pst.setString(6, jRadioButton_lakilaki.isSelected() ? "Laki-laki" : "Perempuan");
+            pst.setString(7, jComboBox_agama.getSelectedItem().toString());
+            pst.executeUpdate();
+            JOptionPane.showMessageDialog(null, "Data added successfully");
+            fetchData();
+            clearForm();
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(null, "Error adding data: " + e.getMessage());
+        }
     }//GEN-LAST:event_btn_tambahActionPerformed
 
     private void btn_ubahActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_ubahActionPerformed
         // TODO add your handling code here:
+        try {
+            Connection con = koneksi.getKoneksi();
+            String sql = "UPDATE tb_akun SET username=?, password=?, email=?, no_tlp=?, alamat=?, jenis_kelamin=?, agama=? WHERE id_akun=?";
+            PreparedStatement pst = con.prepareStatement(sql);
+            pst.setString(1, txt_username.getText());
+            pst.setString(2, txt_password .getText());
+            pst.setString(3, txt_email.getText());
+            pst.setString(4, txt_notelp.getText());
+            pst.setString(5, txt_alamat.getText());
+            pst.setString(6, jRadioButton_lakilaki.isSelected() ? "Laki-laki" : "Perempuan");
+            pst.setString(7, jComboBox_agama.getSelectedItem().toString());
+            pst.setInt(8, Integer.parseInt(jTable1.getValueAt(jTable1.getSelectedRow(), 0).toString()));
+            pst.executeUpdate();
+            JOptionPane.showMessageDialog(null, "Data updated successfully");
+            fetchData();
+            clearForm();
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(null, "Error updating data: " + e.getMessage());
+        }
     }//GEN-LAST:event_btn_ubahActionPerformed
 
     private void txt_usernameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txt_usernameActionPerformed
@@ -328,13 +415,45 @@ public class fpegawai extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_txt_notelpActionPerformed
 
-    private void jRadioButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButton1ActionPerformed
+    private void jRadioButton_lakilakiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButton_lakilakiActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jRadioButton1ActionPerformed
+    }//GEN-LAST:event_jRadioButton_lakilakiActionPerformed
 
-    private void jRadioButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButton2ActionPerformed
+    private void jRadioButton_perempuanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButton_perempuanActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jRadioButton2ActionPerformed
+    }//GEN-LAST:event_jRadioButton_perempuanActionPerformed
+
+    private void jTable1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTable1MouseClicked
+        // TODO add your handling code here:
+        int selectedRow = jTable1.getSelectedRow();
+        txt_username.setText(jTable1.getValueAt(selectedRow, 1).toString());
+        txt_password.setText(jTable1.getValueAt(selectedRow, 2).toString());
+        txt_email.setText(jTable1.getValueAt(selectedRow, 3).toString());
+        txt_notelp.setText(jTable1.getValueAt(selectedRow, 4).toString());
+        txt_alamat.setText(jTable1.getValueAt(selectedRow, 5).toString());
+        if (jTable1.getValueAt(selectedRow, 6).toString().equals("Laki-laki")) {
+            jRadioButton_lakilaki.setSelected(true);
+        } else {
+            jRadioButton_perempuan.setSelected(true);
+        }
+        jComboBox_agama.setSelectedItem(jTable1.getValueAt(selectedRow, 7).toString());
+    }//GEN-LAST:event_jTable1MouseClicked
+
+    private void btn_hapusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_hapusActionPerformed
+        // TODO add your handling code here:
+        try {
+            Connection con = koneksi.getKoneksi();
+            String sql = "DELETE FROM tb_akun WHERE id_akun=?";
+            PreparedStatement pst = con.prepareStatement(sql);
+            pst.setInt(1, Integer.parseInt(jTable1.getValueAt(jTable1.getSelectedRow(), 0).toString()));
+            pst.executeUpdate();
+            JOptionPane.showMessageDialog(null, "Data deleted successfully");
+            fetchData();
+            clearForm();
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(null, "Error deleting data: " + e.getMessage());
+        }
+    }//GEN-LAST:event_btn_hapusActionPerformed
 
     /**
      * @param args the command line arguments
@@ -376,11 +495,10 @@ public class fpegawai extends javax.swing.JFrame {
     private javax.swing.JButton btn_hapus;
     private javax.swing.JButton btn_tambah;
     private javax.swing.JButton btn_ubah;
-    private javax.swing.JComboBox<String> jComboBox1;
+    private javax.swing.JComboBox<String> jComboBox_agama;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
@@ -388,8 +506,8 @@ public class fpegawai extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
-    private javax.swing.JRadioButton jRadioButton1;
-    private javax.swing.JRadioButton jRadioButton2;
+    private javax.swing.JRadioButton jRadioButton_lakilaki;
+    private javax.swing.JRadioButton jRadioButton_perempuan;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JTable jTable1;
@@ -397,7 +515,6 @@ public class fpegawai extends javax.swing.JFrame {
     private javax.swing.JTextField txt_email;
     private javax.swing.JTextField txt_notelp;
     private javax.swing.JPasswordField txt_password;
-    private javax.swing.JPasswordField txt_password1;
     private javax.swing.JTextField txt_username;
     // End of variables declaration//GEN-END:variables
 }
