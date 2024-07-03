@@ -11,6 +11,23 @@ import java.sql.*;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import java.awt.event.KeyEvent;
+import javax.swing.table.DefaultTableModel;
+import com.itextpdf.text.Document;
+import com.itextpdf.text.DocumentException;
+import com.itextpdf.text.Element;
+import com.itextpdf.text.Font;
+import com.itextpdf.text.FontFactory;
+import com.itextpdf.text.PageSize;
+import com.itextpdf.text.Paragraph;
+import com.itextpdf.text.Phrase;
+import com.itextpdf.text.pdf.PdfPCell;
+import com.itextpdf.text.pdf.PdfPTable;
+import com.itextpdf.text.pdf.PdfWriter;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 /**
  *
@@ -130,6 +147,25 @@ public class fpenjualan extends javax.swing.JFrame {
         }
     }
 
+    private String getUniqueFilePath(String directoryPath, String baseFileName) {
+        File file = new File(directoryPath, baseFileName);
+        if (!file.exists()) {
+            return file.getAbsolutePath();
+        }
+
+        String nameWithoutExtension = baseFileName.substring(0, baseFileName.lastIndexOf('.'));
+        String extension = baseFileName.substring(baseFileName.lastIndexOf('.'));
+        int count = 1;
+
+        while (file.exists()) {
+            String newFileName = nameWithoutExtension + "(" + count + ")" + extension;
+            file = new File(directoryPath, newFileName);
+            count++;
+        }
+
+        return file.getAbsolutePath();
+    }
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -166,7 +202,7 @@ public class fpenjualan extends javax.swing.JFrame {
         jLabel9 = new javax.swing.JLabel();
         txt_kembalian = new javax.swing.JTextField();
         btn_selesaiTransaksi = new javax.swing.JButton();
-        btn_cetak = new javax.swing.JButton();
+        btn_cetakInvoice = new javax.swing.JButton();
         jLabel10 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -257,7 +293,7 @@ public class fpenjualan extends javax.swing.JFrame {
             }
         });
 
-        pilihBarang.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Pilih Barang", "Item 2", "Item 3", "Item 4" }));
+        pilihBarang.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Pilih Barang", " " }));
         pilihBarang.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 pilihBarangActionPerformed(evt);
@@ -339,10 +375,10 @@ public class fpenjualan extends javax.swing.JFrame {
             }
         });
 
-        btn_cetak.setText("Cetak");
-        btn_cetak.addActionListener(new java.awt.event.ActionListener() {
+        btn_cetakInvoice.setText("Cetak Invoice");
+        btn_cetakInvoice.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btn_cetakActionPerformed(evt);
+                btn_cetakInvoiceActionPerformed(evt);
             }
         });
 
@@ -357,7 +393,7 @@ public class fpenjualan extends javax.swing.JFrame {
             .addGroup(jPanel3Layout.createSequentialGroup()
                 .addGap(49, 49, 49)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(btn_cetak, javax.swing.GroupLayout.PREFERRED_SIZE, 183, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btn_cetakInvoice, javax.swing.GroupLayout.PREFERRED_SIZE, 183, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btn_selesaiTransaksi, javax.swing.GroupLayout.PREFERRED_SIZE, 183, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                         .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
@@ -399,10 +435,10 @@ public class fpenjualan extends javax.swing.JFrame {
                     .addComponent(jLabel9)
                     .addComponent(txt_kembalian, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
+                .addComponent(btn_cetakInvoice)
+                .addGap(18, 18, 18)
                 .addComponent(btn_selesaiTransaksi)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(btn_cetak)
-                .addContainerGap(41, Short.MAX_VALUE))
+                .addContainerGap(40, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
@@ -455,7 +491,7 @@ public class fpenjualan extends javax.swing.JFrame {
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 115, Short.MAX_VALUE))
+                        .addGap(0, 111, Short.MAX_VALUE))
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel4)
@@ -750,16 +786,83 @@ public class fpenjualan extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_btn_selesaiTransaksiActionPerformed
 
-    private void btn_cetakActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_cetakActionPerformed
+    private void btn_cetakInvoiceActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_cetakInvoiceActionPerformed
         // TODO add your handling code here:
-//        try {
-//            Desktop.getDesktop().browse(new URL("http://localhost/PenjualanBarang/invoice.php?lap&fk=" + jTextField2.getText() + "").toURI());
-//        } catch (Exception e) {
-//            System.out.println(e);
-//
-//        }
+        try {
+            String directoryPath = "C:/Users/adiyo/OneDrive/Documents";
+            String filePath = directoryPath + "/Invoice_PratamaShop.pdf";
 
-    }//GEN-LAST:event_btn_cetakActionPerformed
+            filePath = getUniqueFilePath(directoryPath, "Invoice_PratamaShop.pdf");
+
+            Document document = new Document(PageSize.A4.rotate());
+            PdfWriter.getInstance(document, new FileOutputStream(filePath));
+            document.open();
+
+            Paragraph title = new Paragraph("INVOICE - Pratama Shop", FontFactory.getFont(FontFactory.HELVETICA_BOLD, 18, Font.BOLD));
+            title.setAlignment(Element.ALIGN_CENTER);
+            document.add(title);
+
+            Paragraph noFakturParagraph = new Paragraph("No. Faktur: " + noFaktur.getText(), FontFactory.getFont(FontFactory.HELVETICA, 12));
+            noFakturParagraph.setSpacingBefore(20);
+            document.add(noFakturParagraph);
+
+            long millis = System.currentTimeMillis();
+            java.sql.Date date = new java.sql.Date(millis);
+            Paragraph dateParagraph = new Paragraph("Tanggal: " + date.toString(), FontFactory.getFont(FontFactory.HELVETICA, 12));
+            document.add(dateParagraph);
+
+            PdfPTable table = new PdfPTable(4);
+            table.setWidthPercentage(100);
+            table.setSpacingBefore(20f);
+            table.setSpacingAfter(20f);
+
+            String[] headers = {"Nama Barang", "Jumlah Jual", "Harga Barang", "Total"};
+            for (String header : headers) {
+                PdfPCell headerCell = new PdfPCell(new Phrase(header, FontFactory.getFont(FontFactory.HELVETICA_BOLD, 12)));
+                headerCell.setHorizontalAlignment(Element.ALIGN_CENTER);
+                table.addCell(headerCell);
+            }
+
+            Connection c = koneksi.getKoneksi();
+            Statement s = c.createStatement();
+            String sql = "SELECT * FROM tb_hitung_jual";
+            ResultSet r = s.executeQuery(sql);
+
+            while (r.next()) {
+                table.addCell(new PdfPCell(new Phrase(r.getString("nama_barang"), FontFactory.getFont(FontFactory.HELVETICA, 12))));
+                table.addCell(new PdfPCell(new Phrase(r.getString("jumlah_jual"), FontFactory.getFont(FontFactory.HELVETICA, 12))));
+                table.addCell(new PdfPCell(new Phrase(r.getString("harga_satuan"), FontFactory.getFont(FontFactory.HELVETICA, 12))));
+                table.addCell(new PdfPCell(new Phrase(r.getString("harga"), FontFactory.getFont(FontFactory.HELVETICA, 12))));
+            }
+
+            document.add(table);
+
+            Paragraph totalBelanjaParagraph = new Paragraph("Total Belanja: " + jLabel7.getText(), FontFactory.getFont(FontFactory.HELVETICA_BOLD, 12));
+            totalBelanjaParagraph.setAlignment(Element.ALIGN_RIGHT);
+            totalBelanjaParagraph.setSpacingBefore(10f);
+            document.add(totalBelanjaParagraph);
+
+            Paragraph bayarParagraph = new Paragraph("Uang Tunai: " + txt_bayar.getText(), FontFactory.getFont(FontFactory.HELVETICA_BOLD, 12));
+            bayarParagraph.setAlignment(Element.ALIGN_RIGHT);
+            document.add(bayarParagraph);
+
+            Paragraph kembalianParagraph = new Paragraph("Kembalian: " + txt_kembalian.getText(), FontFactory.getFont(FontFactory.HELVETICA_BOLD, 12));
+            kembalianParagraph.setAlignment(Element.ALIGN_RIGHT);
+            document.add(kembalianParagraph);
+
+            document.close();
+            
+            JOptionPane.showMessageDialog(null, "Invoice berhasil dicetak!", "Pratama Shop", JOptionPane.INFORMATION_MESSAGE);
+
+            if (Desktop.isDesktopSupported()) {
+                Desktop.getDesktop().open(new File(filePath));
+            }
+        
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, "Terjadi kesalahan: " + e.getMessage(), "Pratama Shop", JOptionPane.ERROR_MESSAGE);
+            e.printStackTrace();
+        }
+    }//GEN-LAST:event_btn_cetakInvoiceActionPerformed
 
     private void txt_bayarKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txt_bayarKeyReleased
         // TODO add your handling code here:
@@ -815,7 +918,7 @@ public class fpenjualan extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btn_back;
-    private javax.swing.JButton btn_cetak;
+    private javax.swing.JButton btn_cetakInvoice;
     private javax.swing.JButton btn_hitung;
     private javax.swing.JButton btn_selesaiTransaksi;
     private javax.swing.JButton btn_tambah;

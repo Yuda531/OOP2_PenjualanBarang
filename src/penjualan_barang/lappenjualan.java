@@ -21,6 +21,7 @@ import com.itextpdf.text.Phrase;
 import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
+import java.awt.Desktop;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -49,7 +50,8 @@ public class lappenjualan extends javax.swing.JFrame {
         model.addColumn("Harga");
         model.addColumn("Tanggal Penjualan");
     }
-private String getUniqueFilePath(String directoryPath, String baseFileName) {
+
+    private String getUniqueFilePath(String directoryPath, String baseFileName) {
         File file = new File(directoryPath, baseFileName);
         if (!file.exists()) {
             return file.getAbsolutePath();
@@ -67,7 +69,7 @@ private String getUniqueFilePath(String directoryPath, String baseFileName) {
 
         return file.getAbsolutePath();
     }
-    
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -327,7 +329,7 @@ private String getUniqueFilePath(String directoryPath, String baseFileName) {
             document.open();
 
             Font boldFont = new Font(Font.FontFamily.TIMES_ROMAN, 20, Font.BOLD);
-            Font boldFont2 = new Font(Font.FontFamily.TIMES_ROMAN, 16, Font.BOLD);
+            Font boldFont2 = new Font(Font.FontFamily.TIMES_ROMAN, 14, Font.BOLD);
             Paragraph title = new Paragraph("Laporan Penjualan", boldFont);
             title.setAlignment(Element.ALIGN_CENTER);
             document.add(title);
@@ -365,11 +367,17 @@ private String getUniqueFilePath(String directoryPath, String baseFileName) {
 
             document.add(tablePenjualan);
             String totalPendapatan = txt_totalPendapatan2.getText();
-            Paragraph totalPendapatanParagraph = new Paragraph("Total Pendapatan: " + totalPendapatan, boldFont);
+            Paragraph totalPendapatanParagraph = new Paragraph("Total Pendapatan: " + totalPendapatan, boldFont2);
             totalPendapatanParagraph.setAlignment(Element.ALIGN_RIGHT);
             document.add(totalPendapatanParagraph);
             document.close();
+            
             JOptionPane.showMessageDialog(this, "PDF Generated Successfully at " + filePath);
+            
+            if (Desktop.isDesktopSupported()) {
+                Desktop.getDesktop().open(new File(filePath));
+            }
+            
 
         } catch (DocumentException | IOException e) {
             JOptionPane.showMessageDialog(this, "Error generating PDF: " + e.getMessage());
