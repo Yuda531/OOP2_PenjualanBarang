@@ -29,11 +29,11 @@ public class fbarang extends javax.swing.JFrame {
         model = new DefaultTableModel();
         tabelinput.setModel(model);
 
-        model.addColumn("kd_barang");
-        model.addColumn("nama_barang");
-        model.addColumn("jumlah_barang");
-        model.addColumn("harga_beli");
-        model.addColumn("harga_jual");
+        model.addColumn("Kode Barang");
+        model.addColumn("Nama Barang");
+        model.addColumn("Jumlah Barang");
+        model.addColumn("Harga Beli");
+        model.addColumn("Harga Jual");
         loadData();
         kode();
     }
