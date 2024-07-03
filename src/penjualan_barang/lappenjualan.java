@@ -49,8 +49,7 @@ public class lappenjualan extends javax.swing.JFrame {
         model.addColumn("Harga");
         model.addColumn("Tanggal Penjualan");
     }
-
-    private String getUniqueFilePath(String directoryPath, String baseFileName) {
+private String getUniqueFilePath(String directoryPath, String baseFileName) {
         File file = new File(directoryPath, baseFileName);
         if (!file.exists()) {
             return file.getAbsolutePath();
@@ -68,7 +67,7 @@ public class lappenjualan extends javax.swing.JFrame {
 
         return file.getAbsolutePath();
     }
-
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
