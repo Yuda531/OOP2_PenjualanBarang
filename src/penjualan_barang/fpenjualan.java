@@ -204,6 +204,7 @@ public class fpenjualan extends javax.swing.JFrame {
         btn_selesaiTransaksi = new javax.swing.JButton();
         btn_cetakInvoice = new javax.swing.JButton();
         jLabel10 = new javax.swing.JLabel();
+        jTextField1 = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -441,6 +442,12 @@ public class fpenjualan extends javax.swing.JFrame {
                 .addContainerGap(40, Short.MAX_VALUE))
         );
 
+        jTextField1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jTextField1ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
@@ -451,28 +458,33 @@ public class fpenjualan extends javax.swing.JFrame {
                         .addGap(50, 50, 50)
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel6)
-                            .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel2Layout.createSequentialGroup()
-                                    .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                        .addComponent(jLabel3)
-                                        .addComponent(jLabel5)
-                                        .addComponent(jLabel4)
-                                        .addComponent(jLabel2))
-                                    .addGap(18, 18, 18)
-                                    .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                        .addComponent(kdBarang)
-                                        .addComponent(hargaSatuan)
-                                        .addComponent(jumlahJual)
-                                        .addComponent(noFaktur)
-                                        .addComponent(pilihBarang, 0, 172, Short.MAX_VALUE)
-                                        .addComponent(txt_total))
-                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(btn_hitung))
-                                .addComponent(jScrollPane2, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 440, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                            .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 440, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(jPanel2Layout.createSequentialGroup()
+                                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabel3)
+                                    .addComponent(jLabel5)
+                                    .addComponent(jLabel4)
+                                    .addComponent(jLabel2))
+                                .addGap(18, 18, 18)
+                                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addComponent(kdBarang)
+                                    .addComponent(hargaSatuan)
+                                    .addComponent(jumlahJual)
+                                    .addComponent(noFaktur)
+                                    .addComponent(pilihBarang, 0, 172, Short.MAX_VALUE)
+                                    .addComponent(txt_total))
+                                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(jPanel2Layout.createSequentialGroup()
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                        .addComponent(btn_hitung))
+                                    .addGroup(jPanel2Layout.createSequentialGroup()
+                                        .addGap(36, 36, 36)
+                                        .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 127, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGap(0, 0, Short.MAX_VALUE))))))
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addGap(111, 111, 111)
                         .addComponent(btn_tambah, javax.swing.GroupLayout.PREFERRED_SIZE, 291, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(29, 29, 29)
+                .addGap(15, 15, 15)
                 .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGap(21, 21, 21))
         );
@@ -482,7 +494,8 @@ public class fpenjualan extends javax.swing.JFrame {
                 .addGap(21, 21, 21)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel3)
-                    .addComponent(noFaktur, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(noFaktur, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(24, 24, 24)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel2)
@@ -774,8 +787,10 @@ public class fpenjualan extends javax.swing.JFrame {
                         pst.execute();
                         JOptionPane.showMessageDialog(null, "TRANSAKSI SELESAI", "Pratama Shop", JOptionPane.INFORMATION_MESSAGE);
                         loadData();
+                        jTextField1.setText(noFaktur.getText());
                         txt_kembalian.setText("");
                         txt_bayar.setText("");
+                        jLabel7.setText("");
                         nofaktur();
                         btn_tambah.setEnabled(true);
                     } catch (Exception e) {
@@ -789,10 +804,17 @@ public class fpenjualan extends javax.swing.JFrame {
     private void btn_cetakInvoiceActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_cetakInvoiceActionPerformed
         // TODO add your handling code here:
         try {
-            String directoryPath = "C:/Users/adiyo/OneDrive/Documents";
-            String filePath = directoryPath + "/Invoice_PratamaShop.pdf";
+            String noFakturCetak = jTextField1.getText();
 
-            filePath = getUniqueFilePath(directoryPath, "Invoice_PratamaShop.pdf");
+            if (noFakturCetak.isEmpty()) {
+                JOptionPane.showMessageDialog(null, "Nomor Faktur kosong!", "Pratama Shop", JOptionPane.WARNING_MESSAGE);
+                return;
+            }
+
+            String directoryPath = "C:/Users/adiyo/OneDrive/Documents";
+            String filePath = directoryPath + "/Invoice_PratamaShop_" + noFakturCetak + ".pdf";
+
+            filePath = getUniqueFilePath(directoryPath, "Invoice_PratamaShop_" + noFakturCetak + ".pdf");
 
             Document document = new Document(PageSize.A4.rotate());
             PdfWriter.getInstance(document, new FileOutputStream(filePath));
@@ -802,7 +824,7 @@ public class fpenjualan extends javax.swing.JFrame {
             title.setAlignment(Element.ALIGN_CENTER);
             document.add(title);
 
-            Paragraph noFakturParagraph = new Paragraph("No. Faktur: " + noFaktur.getText(), FontFactory.getFont(FontFactory.HELVETICA, 12));
+            Paragraph noFakturParagraph = new Paragraph("No. Faktur: " + noFakturCetak, FontFactory.getFont(FontFactory.HELVETICA, 12));
             noFakturParagraph.setSpacingBefore(20);
             document.add(noFakturParagraph);
 
@@ -825,39 +847,45 @@ public class fpenjualan extends javax.swing.JFrame {
 
             Connection c = koneksi.getKoneksi();
             Statement s = c.createStatement();
-            String sql = "SELECT * FROM tb_hitung_jual";
+            String sql = "SELECT * FROM tb_penjualan WHERE no_faktur = '" + noFakturCetak + "'";
             ResultSet r = s.executeQuery(sql);
+
+            String totalBelanja = "";
+            String bayar = "";
+            String kembalian = "";
 
             while (r.next()) {
                 table.addCell(new PdfPCell(new Phrase(r.getString("nama_barang"), FontFactory.getFont(FontFactory.HELVETICA, 12))));
                 table.addCell(new PdfPCell(new Phrase(r.getString("jumlah_jual"), FontFactory.getFont(FontFactory.HELVETICA, 12))));
-                table.addCell(new PdfPCell(new Phrase(r.getString("harga_satuan"), FontFactory.getFont(FontFactory.HELVETICA, 12))));
+                table.addCell(new PdfPCell(new Phrase(r.getString("hsatuan"), FontFactory.getFont(FontFactory.HELVETICA, 12))));
                 table.addCell(new PdfPCell(new Phrase(r.getString("harga"), FontFactory.getFont(FontFactory.HELVETICA, 12))));
+                totalBelanja = r.getString("harga");
+                bayar = r.getString("bayar");
+                kembalian = r.getString("kembalian");
             }
 
             document.add(table);
 
-            Paragraph totalBelanjaParagraph = new Paragraph("Total Belanja: " + jLabel7.getText(), FontFactory.getFont(FontFactory.HELVETICA_BOLD, 12));
+            Paragraph totalBelanjaParagraph = new Paragraph("Total Belanja: Rp." + totalBelanja, FontFactory.getFont(FontFactory.HELVETICA_BOLD, 12));
             totalBelanjaParagraph.setAlignment(Element.ALIGN_RIGHT);
             totalBelanjaParagraph.setSpacingBefore(10f);
             document.add(totalBelanjaParagraph);
 
-            Paragraph bayarParagraph = new Paragraph("Uang Tunai: " + txt_bayar.getText(), FontFactory.getFont(FontFactory.HELVETICA_BOLD, 12));
+            Paragraph bayarParagraph = new Paragraph("Uang Tunai: Rp." + bayar, FontFactory.getFont(FontFactory.HELVETICA_BOLD, 12));
             bayarParagraph.setAlignment(Element.ALIGN_RIGHT);
             document.add(bayarParagraph);
 
-            Paragraph kembalianParagraph = new Paragraph("Kembalian: " + txt_kembalian.getText(), FontFactory.getFont(FontFactory.HELVETICA_BOLD, 12));
+            Paragraph kembalianParagraph = new Paragraph("Kembalian: Rp." + kembalian, FontFactory.getFont(FontFactory.HELVETICA_BOLD, 12));
             kembalianParagraph.setAlignment(Element.ALIGN_RIGHT);
             document.add(kembalianParagraph);
-
             document.close();
-            
+
             JOptionPane.showMessageDialog(null, "Invoice berhasil dicetak!", "Pratama Shop", JOptionPane.INFORMATION_MESSAGE);
 
             if (Desktop.isDesktopSupported()) {
                 Desktop.getDesktop().open(new File(filePath));
             }
-        
+
         } catch (Exception e) {
             JOptionPane.showMessageDialog(null, "Terjadi kesalahan: " + e.getMessage(), "Pratama Shop", JOptionPane.ERROR_MESSAGE);
             e.printStackTrace();
@@ -872,6 +900,10 @@ public class fpenjualan extends javax.swing.JFrame {
 
         txt_kembalian.setText(Long.toString(kembali));
     }//GEN-LAST:event_txt_bayarKeyReleased
+
+    private void jTextField1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField1ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jTextField1ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -938,6 +970,7 @@ public class fpenjualan extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JTextField jTextField1;
     private javax.swing.JTextField jumlahJual;
     private javax.swing.JTextField kdBarang;
     private javax.swing.JTextField noFaktur;
