@@ -202,8 +202,8 @@ public class fpenjualan extends javax.swing.JFrame {
         jLabel9 = new javax.swing.JLabel();
         txt_kembalian = new javax.swing.JTextField();
         btn_selesaiTransaksi = new javax.swing.JButton();
-        btn_cetakInvoice = new javax.swing.JButton();
         jLabel10 = new javax.swing.JLabel();
+        btn_cetakInvoice = new javax.swing.JButton();
         jTextField1 = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -376,6 +376,10 @@ public class fpenjualan extends javax.swing.JFrame {
             }
         });
 
+        jLabel10.setFont(new java.awt.Font("Cambria", 1, 24)); // NOI18N
+        jLabel10.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel10.setText("Rp.");
+
         btn_cetakInvoice.setText("Cetak Invoice");
         btn_cetakInvoice.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -383,40 +387,40 @@ public class fpenjualan extends javax.swing.JFrame {
             }
         });
 
-        jLabel10.setFont(new java.awt.Font("Cambria", 1, 24)); // NOI18N
-        jLabel10.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel10.setText("Rp.");
-
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
         jPanel3Layout.setHorizontalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel3Layout.createSequentialGroup()
-                .addGap(49, 49, 49)
-                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(btn_cetakInvoice, javax.swing.GroupLayout.PREFERRED_SIZE, 183, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btn_selesaiTransaksi, javax.swing.GroupLayout.PREFERRED_SIZE, 183, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
-                            .addComponent(jLabel8)
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                .addComponent(txt_bayar, javax.swing.GroupLayout.PREFERRED_SIZE, 128, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addComponent(txt_kembalian, javax.swing.GroupLayout.PREFERRED_SIZE, 128, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addGroup(jPanel3Layout.createSequentialGroup()
-                            .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                .addGroup(jPanel3Layout.createSequentialGroup()
-                                    .addGap(31, 31, 31)
-                                    .addComponent(btn_total, javax.swing.GroupLayout.PREFERRED_SIZE, 183, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addComponent(jLabel9))
-                            .addGap(0, 29, Short.MAX_VALUE))))
-                .addContainerGap(41, Short.MAX_VALUE))
             .addGroup(jPanel3Layout.createSequentialGroup()
                 .addGap(74, 74, 74)
                 .addComponent(jLabel10)
                 .addGap(26, 26, 26)
                 .addComponent(jLabel7)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGroup(jPanel3Layout.createSequentialGroup()
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(jPanel3Layout.createSequentialGroup()
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(btn_cetakInvoice, javax.swing.GroupLayout.PREFERRED_SIZE, 183, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel3Layout.createSequentialGroup()
+                        .addGap(49, 49, 49)
+                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(btn_selesaiTransaksi, javax.swing.GroupLayout.PREFERRED_SIZE, 183, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
+                                    .addComponent(jLabel8)
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                        .addComponent(txt_bayar, javax.swing.GroupLayout.PREFERRED_SIZE, 128, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(txt_kembalian, javax.swing.GroupLayout.PREFERRED_SIZE, 128, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                .addGroup(jPanel3Layout.createSequentialGroup()
+                                    .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                        .addGroup(jPanel3Layout.createSequentialGroup()
+                                            .addGap(31, 31, 31)
+                                            .addComponent(btn_total, javax.swing.GroupLayout.PREFERRED_SIZE, 183, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                        .addComponent(jLabel9))
+                                    .addGap(0, 29, Short.MAX_VALUE))))))
+                .addContainerGap(41, Short.MAX_VALUE))
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -436,9 +440,9 @@ public class fpenjualan extends javax.swing.JFrame {
                     .addComponent(jLabel9)
                     .addComponent(txt_kembalian, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
-                .addComponent(btn_cetakInvoice)
-                .addGap(18, 18, 18)
                 .addComponent(btn_selesaiTransaksi)
+                .addGap(18, 18, 18)
+                .addComponent(btn_cetakInvoice)
                 .addContainerGap(40, Short.MAX_VALUE))
         );
 
@@ -866,21 +870,23 @@ public class fpenjualan extends javax.swing.JFrame {
 
             document.add(table);
 
-            Paragraph totalBelanjaParagraph = new Paragraph("Total Belanja: Rp." + totalBelanja, FontFactory.getFont(FontFactory.HELVETICA_BOLD, 12));
+            Paragraph totalBelanjaParagraph = new Paragraph("Total Belanja: Rp. " + totalBelanja, FontFactory.getFont(FontFactory.HELVETICA_BOLD, 12));
             totalBelanjaParagraph.setAlignment(Element.ALIGN_RIGHT);
             totalBelanjaParagraph.setSpacingBefore(10f);
             document.add(totalBelanjaParagraph);
 
-            Paragraph bayarParagraph = new Paragraph("Uang Tunai: Rp." + bayar, FontFactory.getFont(FontFactory.HELVETICA_BOLD, 12));
+            Paragraph bayarParagraph = new Paragraph("Uang Tunai: Rp. " + bayar, FontFactory.getFont(FontFactory.HELVETICA_BOLD, 12));
             bayarParagraph.setAlignment(Element.ALIGN_RIGHT);
             document.add(bayarParagraph);
 
-            Paragraph kembalianParagraph = new Paragraph("Kembalian: Rp." + kembalian, FontFactory.getFont(FontFactory.HELVETICA_BOLD, 12));
+            Paragraph kembalianParagraph = new Paragraph("Kembalian: Rp. " + kembalian, FontFactory.getFont(FontFactory.HELVETICA_BOLD, 12));
             kembalianParagraph.setAlignment(Element.ALIGN_RIGHT);
             document.add(kembalianParagraph);
             document.close();
 
             JOptionPane.showMessageDialog(null, "Invoice berhasil dicetak!", "Pratama Shop", JOptionPane.INFORMATION_MESSAGE);
+            
+            jTextField1.setText("");
 
             if (Desktop.isDesktopSupported()) {
                 Desktop.getDesktop().open(new File(filePath));
